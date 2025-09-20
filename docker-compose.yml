@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:15
+    container_name: blog-db
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: blog
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    container_name: blog-app
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+    volumes:
+    - "./blog_app:/blog_app"
+    ports:
+    - "3000:3000"
+    depends_on:
+    - db
